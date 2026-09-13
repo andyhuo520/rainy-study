@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>雨夜书房 / AFTER HOURS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230E1714'/%3E%3Crect x='12' y='16' width='11' height='34' rx='2' fill='%232E4A3C'/%3E%3Crect x='26' y='12' width='11' height='38' rx='2' fill='%238A5A2B'/%3E%3Crect x='40' y='20' width='11' height='30' rx='2' fill='%236B3A3A'/%3E%3Ccircle cx='32' cy='52' r='3' fill='%23D8A24A'/%3E%3C/svg%3E" />
+<style>
+  :root{
+    --cream:#F3EBDC; --cream-dim:#CFC3AE; --amber:#D8A24A; --amber-deep:#A9772E;
+    --ink:#1C2B26; --ink-2:#26382F; --green:#1F3A30; --green-2:#2C4E41;
+    --line:rgba(243,235,220,.16); --line-strong:rgba(243,235,220,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0E1714;color:var(--cream);
+    font-family:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",Georgia,"Times New Roman",serif;}
+  #app{position:fixed;inset:0;}
+  canvas{display:block;width:100%;height:100%;touch-action:none;}
+  .panel{position:absolute;pointer-events:auto;user-select:none;
+    background:linear-gradient(160deg,rgba(28,43,38,.90),rgba(16,26,22,.92));
+    backdrop-filter:blur(14px) saturate(1.1);-webkit-backdrop-filter:blur(14px) saturate(1.1);
+    border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(243,235,220,.08);}
+  /* ---------- 标题 ---------- */
+  #title{top:18px;left:20px;padding:12px 18px 12px 16px;max-width:min(340px,60vw);}
+  #title .row1{display:flex;align-items:baseline;gap:10px;}
+  #title h1{font-size:19px;letter-spacing:.14em;font-weight:600;color:var(--cream);white-space:nowrap;}
+  #title .en{font-size:10px;letter-spacing:.34em;color:var(--amber);font-family:Georgia,serif;}
+  #title .sub{margin-top:6px;font-size:11.5px;letter-spacing:.10em;color:var(--cream-dim);line-height:1.6;}
+  #title .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--amber);margin-right:7px;vertical-align:1px;}
+  /* ---------- 视角栏 ---------- */
+  #views{left:20px;bottom:22px;padding:8px;display:flex;flex-direction:column;gap:4px;}
+  .vbtn{display:flex;align-items:center;gap:10px;padding:9px 14px 9px 12px;border-radius:10px;
+    border:1px solid transparent;background:transparent;color:var(--cream-dim);cursor:pointer;
+    font-family:inherit;font-size:13px;letter-spacing:.10em;text-align:left;transition:.28s;min-width:132px;}
+  /* ---------- 侧栏折叠 ---------- */
+  #side-toggle{display:none;position:absolute;right:12px;top:12px;z-index:26;padding:9px 13px;
+    font-size:12px;letter-spacing:.14em;}
+  #side.collapsed{display:none;}
+  #side.floating{box-shadow:0 22px 60px rgba(0,0,0,.6), inset 0 1px 0 rgba(243,235,220,.08);}
+  .vbtn .num{font-size:10px;color:var(--amber);font-family:Georgia,serif;letter-spacing:.1em;opacity:.85;}
+  .vbtn:hover{color:var(--cream);background:rgba(243,235,220,.06);}
+  .vbtn.active{color:var(--cream);background:rgba(216,162,74,.13);border-color:rgba(216,162,74,.42);}
+  .vbtn.active .num{color:var(--amber);}
+  /* ---------- 右侧 ---------- */
+  #side{right:20px;top:18px;width:min(246px,38vw);padding:14px 16px;display:flex;flex-direction:column;gap:12px;}
+  .sect-t{font-size:10.5px;letter-spacing:.30em;color:var(--amber);font-family:Georgia,serif;}
+  .weather-row{display:flex;gap:8px;}
+  .wbtn{flex:1;padding:10px 6px;border-radius:10px;border:1px solid var(--line);background:rgba(243,235,220,.04);
+    color:var(--cream-dim);font-family:inherit;font-size:12.5px;letter-spacing:.12em;cursor:pointer;transition:.25s;}
+  .wbtn.on{background:rgba(216,162,74,.16);border-color:rgba(216,162,74,.5);color:var(--cream);}
+  .hint{font-size:11.5px;line-height:1.75;color:var(--cream-dim);letter-spacing:.04em;}
+  .hint b{color:var(--cream);font-weight:600;}
+  .klist{display:flex;flex-direction:column;gap:5px;border-top:1px solid var(--line);padding-top:11px;}
+  .kbtn{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;
+    border:1px solid var(--line);background:transparent;color:var(--cream-dim);font-family:inherit;font-size:12px;
+    letter-spacing:.06em;cursor:pointer;text-align:left;transition:.22s;}
+  .kbtn:hover{background:rgba(243,235,220,.06);color:var(--cream);}
+  .kbtn .t{color:var(--amber);font-size:10px;font-family:Georgia,serif;letter-spacing:.08em;}
+  #reset{margin-top:2px;padding:9px;border-radius:9px;border:1px solid var(--line-strong);background:rgba(243,235,220,.05);
+    color:var(--cream);font-family:inherit;font-size:12px;letter-spacing:.14em;cursor:pointer;transition:.22s;}
+  #reset:hover{background:rgba(216,162,74,.16);border-color:rgba(216,162,74,.5);}
+  /* ---------- 书本提示 ---------- */
+  #booktip{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);padding:8px 18px;font-size:12px;
+    letter-spacing:.14em;color:var(--cream-dim);opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap;}
+  #booktip.show{opacity:1;}
+  /* ---------- 阅读面板 ---------- */
+  #reader{right:20px;top:18px;width:min(404px,92vw);max-height:82vh;padding:0;overflow:hidden;display:none;z-index:30;}
+  #reader.open{display:block;animation:rin .38s cubic-bezier(.2,.8,.25,1);}
+  @keyframes rin{from{opacity:0;transform:translateY(14px) scale(.985);}to{opacity:1;transform:none;}}
+  #reader .rhead{display:flex;align-items:flex-start;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(216,162,74,.10),transparent);}
+  #reader .rk{font-size:10px;letter-spacing:.3em;color:var(--amber);font-family:Georgia,serif;margin-bottom:6px;}
+  #reader h2{font-size:21px;letter-spacing:.10em;color:var(--cream);font-weight:600;line-height:1.35;}
+  #reader .meta{font-size:11px;color:var(--cream-dim);letter-spacing:.12em;margin-top:7px;}
+  #rclose{margin-left:auto;flex:none;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);
+    background:rgba(243,235,220,.05);color:var(--cream-dim);font-size:17px;cursor:pointer;line-height:1;transition:.2s;}
+  #rclose:hover{background:rgba(216,162,74,.18);color:var(--cream);border-color:rgba(216,162,74,.5);}
+  #reader .body{padding:18px 20px 20px;overflow-y:auto;max-height:52vh;}
+  #reader p{font-size:14.5px;line-height:2.05;letter-spacing:.055em;color:rgba(243,235,220,.92);text-align:justify;}
+  #reader .rule{height:1px;background:linear-gradient(90deg,transparent,var(--line-strong),transparent);margin:16px 0;}
+  #reader .foot{font-size:11px;letter-spacing:.16em;color:var(--amber);text-align:right;}
+  /* ---------- 便签 ---------- */
+  #note{right:20px;bottom:22px;width:min(326px,92vw);padding:14px 16px;display:none;z-index:30;}
+  #note.open{display:block;animation:rin .34s cubic-bezier(.2,.8,.25,1);}
+  #note .nt{font-size:10.5px;letter-spacing:.3em;color:var(--amber);font-family:Georgia,serif;margin-bottom:9px;}
+  #note textarea{width:100%;min-height:78px;resize:vertical;background:rgba(243,235,220,.05);border:1px solid var(--line);
+    border-radius:9px;color:var(--cream);font-family:inherit;font-size:13.5px;line-height:1.85;letter-spacing:.05em;
+    padding:10px 11px;outline:none;transition:border-color .2s;}
+  #note textarea:focus{border-color:rgba(216,162,74,.55);background:rgba(243,235,220,.08);}
+  #note .nrow{display:flex;align-items:center;gap:9px;margin-top:10px;}
+  #note .save{padding:8px 20px;border-radius:8px;border:1px solid rgba(216,162,74,.5);background:rgba(216,162,74,.16);
+    color:var(--cream);font-family:inherit;font-size:12.5px;letter-spacing:.14em;cursor:pointer;transition:.2s;}
+  #note .save:hover{background:rgba(216,162,74,.28);}
+  #note .clr{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--cream-dim);
+    font-family:inherit;font-size:12px;letter-spacing:.1em;cursor:pointer;transition:.2s;}
+  #note .clr:hover{color:var(--cream);background:rgba(243,235,220,.06);}
+  #nstat{font-size:11.5px;letter-spacing:.1em;color:var(--cream-dim);margin-left:auto;transition:color .3s;}
+  #nstat.ok{color:#8FD0A6;} #nstat.warn{color:var(--amber);}
+  #nclose{flex:none;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);
+    background:rgba(243,235,220,.05);color:var(--cream-dim);font-size:17px;cursor:pointer;line-height:1;transition:.2s;}
+  #nclose:hover{background:rgba(216,162,74,.18);color:var(--cream);border-color:rgba(216,162,74,.5);}
+  .vrow{display:flex;gap:6px;}
+  .vrow .vbtn{flex:1;justify-content:center;min-width:0;padding:9px 6px;}
+  .vrow .num{display:none;}
+  .panel-blocking{pointer-events:none !important;}
+  /* ---------- 加载 ---------- */
+  #loader{position:fixed;inset:0;z-index:80;background:radial-gradient(120% 120% at 50% 40%,#1B2A25 0%,#0D1512 70%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .7s;}
+  #loader.hide{opacity:0;pointer-events:none;}
+  #loader .lt{font-size:15px;letter-spacing:.42em;color:var(--cream);}
+  #loader .le{font-size:10px;letter-spacing:.36em;color:var(--amber);font-family:Georgia,serif;}
+  #lbar{width:min(220px,52vw);height:2px;background:rgba(243,235,220,.14);border-radius:2px;overflow:hidden;}
+  #lbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber-deep),var(--amber));transition:width .35s;}
+  /* ---------- toast ---------- */
+  #toast{position:fixed;left:50%;top:64px;transform:translate(-50%,-8px);z-index:90;padding:10px 20px;border-radius:10px;
+    font-size:12.5px;letter-spacing:.14em;background:rgba(28,43,38,.94);border:1px solid rgba(216,162,74,.42);
+    color:var(--cream);opacity:0;pointer-events:none;transition:.3s;box-shadow:0 12px 34px rgba(0,0,0,.4);}
+  #toast.show{opacity:1;transform:translate(-50%,0);}
+  @media (max-width:760px){
+    #title{top:12px;left:12px;padding:9px 13px;max-width:calc(100vw - 96px);}
+    #title h1{font-size:15px;letter-spacing:.1em;}
+    #title .en{font-size:8.5px;letter-spacing:.22em;}
+    #title .sub{font-size:10px;margin-top:4px;}
+    #side-toggle{display:block;}
+    #side{right:8px;left:8px;width:auto;top:56px;max-height:calc(100vh - 220px);overflow-y:auto;z-index:28;}
+    #views{left:8px;right:8px;bottom:8px;flex-direction:row;gap:4px;padding:6px;}
+    #views .vbtn{flex:1;justify-content:center;min-width:0;padding:9px 4px;font-size:11.5px;letter-spacing:.06em;}
+    #views .vbtn .num{display:none;}
+    .hint{font-size:10.5px;}
+    #reader{right:8px;left:8px;width:auto;top:auto;bottom:8px;max-height:74vh;}
+    #reader .body{max-height:44vh;}
+    #note{right:8px;left:8px;bottom:8px;width:auto;}
+    #booktip{bottom:auto;top:110px;font-size:10.5px;padding:6px 12px;}
+  }
+</style>
+  <script type="module" crossorigin src="./assets/index-TS9ZA09o.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BF7Egvt3.css">
+</head>
+<body>
+<div id="app"></div>
+
+<div id="loader">
+  <div class="le">AFTER HOURS</div>
+  <div class="lt">雨 夜 书 房</div>
+  <div id="lbar"><i></i></div>
+</div>
+
+<div class="panel" id="title">
+  <div class="row1"><h1>雨夜书房</h1><span class="en">AFTER&nbsp;HOURS</span></div>
+  <div class="sub"><span class="dot"></span>深夜阅读室 · 木、雨与未完成的想法</div>
+</div>
+
+<div class="panel" id="views">
+  <button class="vbtn active" data-view="pano"><span class="num">01</span>全景</button>
+  <button class="vbtn" data-view="shelf"><span class="num">02</span>书架</button>
+  <button class="vbtn" data-view="desk"><span class="num">03</span>书桌</button>
+  <button class="vbtn" data-view="window"><span class="num">04</span>窗边</button>
+</div>
+
+<button class="panel" id="side-toggle" aria-label="展开工具">展开工具</button>
+
+<div class="panel" id="side">
+  <div>
+    <div class="sect-t">WEATHER</div>
+    <div class="weather-row" style="margin-top:8px;">
+      <button class="wbtn on" data-weather="rain">雨夜</button>
+      <button class="wbtn" data-weather="sun">晴日</button>
+    </div>
+  </div>
+  <div>
+    <div class="sect-t">READING</div>
+    <div class="klist" style="margin-top:8px;">
+      <button class="kbtn" data-book="0"><span>造物的方法</span><span class="t">NO.01</span></button>
+      <button class="kbtn" data-book="1"><span>未完成的想法</span><span class="t">NO.02</span></button>
+      <button class="kbtn" data-book="2"><span>把世界做成接口</span><span class="t">NO.03</span></button>
+    </div>
+  </div>
+  <div>
+    <div class="sect-t">NOTE</div>
+    <div class="hint" style="margin-top:7px;">点击桌面上的<b>便签</b>写下一段话，保存后留存于本机。</div>
+    <button class="kbtn" id="open-note" style="margin-top:8px;"><span>打开桌面便签</span><span class="t">NOTE</span></button>
+  </div>
+  <div>
+    <div class="sect-t">VIEW</div>
+    <div class="weather-row" style="margin-top:8px;">
+      <button class="wbtn" id="save-view">收藏此刻视角</button>
+      <button class="wbtn" id="restore-view">回到收藏</button>
+    </div>
+  </div>
+  <button id="reset">回到初始视角</button>
+  <div class="hint">拖动环绕 · 滚轮缩放 · ESC 关闭面板</div>
+</div>
+
+<div id="booktip">点击书脊，阅读正文</div>
+
+<div class="panel" id="reader">
+  <div class="rhead">
+    <div style="flex:1;min-width:0;">
+      <div class="rk" id="rk">NO.01</div>
+      <h2 id="rt">书名</h2>
+      <div class="meta" id="rm">深夜书房 · 随笔</div>
+    </div>
+    <button id="rclose" aria-label="关闭">✕</button>
+  </div>
+  <div class="body"><div class="rule"></div><p id="rp"></p><div class="rule"></div><div class="foot" id="rf"></div></div>
+</div>
+
+<div class="panel" id="note">
+  <div class="nt" style="display:flex;align-items:center;gap:8px;">NOTE · 桌面便签
+    <button id="nclose" aria-label="关闭便签" style="margin-left:auto;">✕</button>
+  </div>
+  <textarea id="ntext" maxlength="400" placeholder="夜里想到的事，写在这里……"></textarea>
+  <div class="nrow">
+    <button class="save" id="nsave">保存</button>
+    <button class="clr" id="nclear">清空</button>
+    <span id="nstat">未保存</span>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+</body>
+</html>

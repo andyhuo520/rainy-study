@@ -1,0 +1,17 @@
+{
+  "mode": "Codex built-in image_gen",
+  "prompts": [
+    [
+      "fox",
+      "Use case: illustration-story. Generate a premium children's picture book FRONT COVER ART, portrait 2:3, full bleed flat printed artwork not a mockup. A tiny friendly orange fox wearing a teal scarf holds a glowing firefly lantern on a winding woodland path, huge fern leaves, mushrooms, a sleeping hedgehog, intricate layered cut-paper collage with gouache and pencil, visible cotton paper grain, embossed letterpress shapes, deep forest green, terracotta, honey gold, cream. Large calm cream space in top 23 percent reserved for typography to be added separately. Charming handcrafted tactile collectible picturebook, sophisticated composition, rounded child-safe characters, no text, no letters, no watermark, no border."
+    ],
+    [
+      "whale",
+      "Use case: illustration-story. Generate a premium children's picture book FRONT COVER ART, portrait 2:3, full bleed flat printed artwork not a mockup. Friendly little turquoise-blue whale swims under golden sunlight shafts in a magical coral garden, a tiny pearl rests inside a shell below, small orange fish and seagrass, paper-cut layered illustration mixed with gouache and pencil on fibrous cream paper, embossed ink and subtle speckling, cobalt, turquoise, coral pink, warm ivory. Large calm pale aqua space in top 23 percent reserved for typography added separately. Tactile collectible children's picturebook, elegant adventurous composition, no text, no letters, no watermark, no border."
+    ],
+    [
+      "rabbit",
+      "Use case: illustration-story. Generate a premium children's picture book FRONT COVER ART, portrait 2:3, full bleed flat printed artwork not a mockup. A small friendly cream white rabbit in a whimsical pale apricot astronaut suit plants a tiny glowing golden star on a softly cratered moon, a little red toy-like rocket and distant blue Earth, velvet navy night sky, layered cut-paper collage, gouache and colored pencil, cotton paper grain and embossed letterpress texture, dusty periwinkle, apricot and gold. Large calm navy space in top 23 percent reserved for typography added separately. Gentle dreamy collectible picturebook, no text, no letters, no watermark, no border."
+    ]
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "provider": "Microsoft Edge online TTS via edge-tts",
+  "files": [
+    {
+      "file": "fox-1.mp3",
+      "seconds": 27.216,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "fox-0.mp3",
+      "seconds": 28.344,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "fox-2.mp3",
+      "seconds": 27.624,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "fox-3.mp3",
+      "seconds": 27.936,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "whale-0.mp3",
+      "seconds": 26.256,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "whale-1.mp3",
+      "seconds": 28.056,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "whale-2.mp3",
+      "seconds": 27.264,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "whale-3.mp3",
+      "seconds": 29.256,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "rabbit-0.mp3",
+      "seconds": 25.416,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "rabbit-1.mp3",
+      "seconds": 26.928,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "rabbit-2.mp3",
+      "seconds": 27.312,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    },
+    {
+      "file": "rabbit-3.mp3",
+      "seconds": 28.464,
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "rate": "-12%"
+    }
+  ]
+}
